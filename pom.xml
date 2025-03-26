@@ -13,6 +13,7 @@
         <module>consumer</module>
         <module>provider</module>
         <module>lzl-rpc-easy</module>
+        <module>lzl-rpc-core</module>
     </modules>
 
     <properties>

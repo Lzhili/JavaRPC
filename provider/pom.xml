@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.scut</groupId>
-            <artifactId>lzl-rpc-easy</artifactId>
+            <artifactId>lzl-rpc-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
