@@ -28,4 +28,9 @@ public class RpcConfig {
      */
     private Integer serverPort = 8080;
 
+    /**
+     * 是否开启mock，模拟调用
+     */
+    private boolean mock = false;
+
 }
