@@ -15,7 +15,7 @@ public class Consumer {
         // 动态代理
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
-        user.setName("lzl");
+        user.setName("Hi! lzl");
         // 调用
         User newUser = userService.getUser(user);
         if (newUser != null) {

@@ -3,9 +3,11 @@ package com.scut.proxy;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import com.scut.RpcApplication;
 import com.scut.model.RpcRequest;
 import com.scut.model.RpcResponse;
-import com.scut.serializer.JDKSerializer;
+import com.scut.serializer.SerializerFactory;
+import com.scut.serializer.impl.JDKSerializer;
 import com.scut.serializer.Serializer;
 
 import java.io.IOException;
@@ -28,7 +30,7 @@ public class ServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         // 指定序列化器
-        Serializer serializer = new JDKSerializer();
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
         // 构造请求
         RpcRequest rpcRequest = RpcRequest.builder()

@@ -1,5 +1,6 @@
 package com.scut.config;
 
+import com.scut.serializer.SerializerKeys;
 import lombok.Data;
 
 /**
@@ -32,5 +33,10 @@ public class RpcConfig {
      * 是否开启mock，模拟调用
      */
     private boolean mock = false;
+
+    /**
+     * 序列化方式
+     */
+    private String serializer = SerializerKeys.JDK;
 
 }

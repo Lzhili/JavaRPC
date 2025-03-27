@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * RPC 框架应用
  * 相当于 holder，存放了项目全局用到的变量。双检锁单例模式实现
  */
-//@Slf4j
+@Slf4j
 public class RpcApplication {
 
     private static volatile RpcConfig rpcConfig;
@@ -22,8 +22,7 @@ public class RpcApplication {
      */
     public static void init(RpcConfig newRpcConfig) {
         rpcConfig = newRpcConfig;
-//        log.info("rpc init, config = {}", newRpcConfig.toString());
-        System.out.println("rpc init, config = " + newRpcConfig.toString());
+        log.info("rpc init, config = {}", newRpcConfig.toString());
     }
 
     /**

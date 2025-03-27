@@ -1,9 +1,11 @@
 package com.scut.server;
 
+import com.scut.RpcApplication;
 import com.scut.model.RpcRequest;
 import com.scut.model.RpcResponse;
 import com.scut.registry.LocalRegistry;
-import com.scut.serializer.JDKSerializer;
+import com.scut.serializer.SerializerFactory;
+import com.scut.serializer.impl.JDKSerializer;
 import com.scut.serializer.Serializer;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
@@ -25,7 +27,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
     @Override
     public void handle(HttpServerRequest request) {
         // 指定序列化器
-        final Serializer serializer = new JDKSerializer();
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
         // 记录日志
         System.out.println("Received request: " + request.method() + " " + request.uri());

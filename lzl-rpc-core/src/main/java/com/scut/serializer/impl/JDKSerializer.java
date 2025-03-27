@@ -1,4 +1,6 @@
-package com.scut.serializer;
+package com.scut.serializer.impl;
+
+import com.scut.serializer.Serializer;
 
 import java.io.*;
 
