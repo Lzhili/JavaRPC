@@ -5,6 +5,7 @@ import com.scut.serializer.impl.HessianSerializer;
 import com.scut.serializer.impl.JDKSerializer;
 import com.scut.serializer.impl.JsonSerializer;
 import com.scut.serializer.impl.KryoSerializer;
+import com.scut.spi.SpiLoader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,18 +17,17 @@ public class SerializerFactory {
 
     /**
      * 序列化映射（用于实现单例）
+     * 使用静态代码块，在工厂首次加载时，就会调用 SpiLoader 的 load 方法加载序列化器接口的所有实现类，
+     * 之后就可以通过调用 getInstance 方法获取指定的实现类对象了。
      */
-    private static final Map<String, Serializer> KEY_SERIALIZER_MAP = new HashMap<String, Serializer>() {{
-        put(SerializerKeys.JDK, new JDKSerializer());
-        put(SerializerKeys.JSON, new JsonSerializer());
-        put(SerializerKeys.KRYO, new KryoSerializer());
-        put(SerializerKeys.HESSIAN, new HessianSerializer());
-    }};
+    static {
+        SpiLoader.load(Serializer.class);
+    }
 
     /**
      * 默认序列化器 JDK
      */
-    private static final Serializer DEFAULT_SERIALIZER = KEY_SERIALIZER_MAP.get("jdk");
+    private static final Serializer DEFAULT_SERIALIZER = new JDKSerializer();
 
     /**
      * 获取实例
@@ -36,7 +36,7 @@ public class SerializerFactory {
      * @return
      */
     public static Serializer getInstance(String key) {
-        return KEY_SERIALIZER_MAP.getOrDefault(key, DEFAULT_SERIALIZER);
+        return SpiLoader.getInstance(Serializer.class, key);
     }
 
 }
