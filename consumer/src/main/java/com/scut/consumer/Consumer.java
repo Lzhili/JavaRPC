@@ -16,14 +16,32 @@ public class Consumer {
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
         user.setName("Hi! lzl");
-        // 调用
+        // 调用 1
         User newUser = userService.getUser(user);
         if (newUser != null) {
             System.out.println(newUser.getName());
         } else {
             System.out.println("user == null");
         }
-        long number = userService.getNumber();
-        System.out.println(number);
+//        System.out.println("----------------");
+//        try {
+//            Thread.sleep( 30 * 1000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        // 调用 2
+//        System.out.println(userService.getUser(user).getName());
+//        System.out.println("----------------");
+//        try {
+//            Thread.sleep( 30 * 1000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        // 调用 3
+//        System.out.println(userService.getUser(user).getName());
+//        System.out.println("----------------");
+
     }
 }
