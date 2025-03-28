@@ -29,8 +29,8 @@ public class RegistryConfig {
     private String password;
 
     /**
-     * 超时时间（单位毫秒）30秒过期
+     * 超时时间（单位毫秒）client 20秒后与注册中心（端口：2380）断开连接
      */
-    private Long timeout = 30000L;
+    private Long timeout = 20000L;
 }
 
