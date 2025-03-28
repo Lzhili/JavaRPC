@@ -62,7 +62,7 @@ public class RegistryTest {
         serviceMetaInfo.setServiceVersion("1.0");
         String serviceKey = serviceMetaInfo.getServiceKey();
         List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceKey);
-        serviceMetaInfoList.forEach(serviceMetaInfo1 -> System.out.println(serviceMetaInfo1));
+        serviceMetaInfoList.forEach(service -> System.out.println(service));
         Assert.assertNotNull(serviceMetaInfoList);
     }
 }
