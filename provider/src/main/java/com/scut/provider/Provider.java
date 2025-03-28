@@ -2,7 +2,12 @@ package com.scut.provider;
 
 import com.scut.RpcApplication;
 import com.scut.common.service.UserService;
+import com.scut.config.RegistryConfig;
+import com.scut.config.RpcConfig;
+import com.scut.model.ServiceMetaInfo;
 import com.scut.registry.LocalRegistry;
+import com.scut.registry.Registry;
+import com.scut.registry.RegistryFactory;
 import com.scut.server.HttpServer;
 import com.scut.server.VertxHttpServer;
 
@@ -13,7 +18,22 @@ public class Provider {
         RpcApplication.init();
 
         //本地注册服务
-        LocalRegistry.register(UserService.class.getName(), UserServiceImpl.class);
+        String serviceName = UserService.class.getName();
+        LocalRegistry.register(serviceName, UserServiceImpl.class);
+
+        //注册服务到注册中心
+        RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
+        ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
+        serviceMetaInfo.setServiceName(serviceName);
+        serviceMetaInfo.setServiceHost(rpcConfig.getServerHost());
+        serviceMetaInfo.setServicePort(rpcConfig.getServerPort());
+        try{
+            registry.register(serviceMetaInfo);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         //启动web服务
         HttpServer httpServer = new VertxHttpServer();

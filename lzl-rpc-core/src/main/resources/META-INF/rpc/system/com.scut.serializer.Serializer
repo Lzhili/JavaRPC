@@ -1,1 +1,4 @@
 jdk=com.scut.serializer.impl.JDKSerializer
+json=com.scut.serializer.impl.JsonSerializer
+kryo=com.scut.serializer.impl.KryoSerializer
+hessian=com.scut.serializer.impl.HessianSerializer

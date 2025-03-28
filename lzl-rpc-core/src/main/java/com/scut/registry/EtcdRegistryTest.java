@@ -8,7 +8,7 @@ import io.etcd.jetcd.kv.GetResponse;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class EtcdRegistry {
+public class EtcdRegistryTest {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         // create client using endpoints
