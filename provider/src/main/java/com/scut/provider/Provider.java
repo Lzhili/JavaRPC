@@ -10,6 +10,7 @@ import com.scut.registry.Registry;
 import com.scut.registry.RegistryFactory;
 import com.scut.server.HttpServer;
 import com.scut.server.VertxHttpServer;
+import com.scut.server.tcp.VertxTcpServer;
 
 
 public class Provider {
@@ -36,7 +37,12 @@ public class Provider {
         }
 
         //启动web服务
-        HttpServer httpServer = new VertxHttpServer();
-        httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
+        //启动HTTP服务
+//        HttpServer httpServer = new VertxHttpServer();
+//        httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
+
+        //启动TCP服务
+        VertxTcpServer vertxTcpServer = new VertxTcpServer();
+        vertxTcpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
     }
 }
