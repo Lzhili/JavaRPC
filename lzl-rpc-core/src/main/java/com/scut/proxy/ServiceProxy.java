@@ -9,6 +9,8 @@ import com.scut.RpcApplication;
 import com.scut.config.RpcConfig;
 import com.scut.constant.ProtocolConstant;
 import com.scut.constant.RpcConstant;
+import com.scut.loadbalancer.LoadBalancer;
+import com.scut.loadbalancer.LoadBalancerFactory;
 import com.scut.model.RpcRequest;
 import com.scut.model.RpcResponse;
 import com.scut.model.ServiceMetaInfo;
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -69,7 +72,12 @@ public class ServiceProxy implements InvocationHandler {
             if(CollUtil.isEmpty(serviceMetaInfoList)) {
                 throw new RuntimeException("暂时没有可用的服务提供者");
             }
-            ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0); //暂时选第一个，后面用负载均衡
+
+            //负载均衡
+            LoadBalancer loadBalancer = LoadBalancerFactory.getInstance(rpcConfig.getLoadBalancer());
+            //将调用方法名（请求路径）作为负载均衡器的参数
+            Map<String, Object> requestParams = Map.of("methodName", rpcRequest.getMethodName());
+            ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
 
 //            // 发送http请求
 //            try (HttpResponse httpResponse = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())

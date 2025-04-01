@@ -31,8 +31,8 @@ public class Consumer {
 //        }
 //
 //        // 调用 2
-//        System.out.println(userService.getUser(user).getName());
-//        System.out.println("----------------");
+        System.out.println(userService.getUser(user).getName());
+        System.out.println("----------------");
 //        try {
 //            Thread.sleep( 30 * 1000);
 //        } catch (InterruptedException e) {
@@ -40,8 +40,8 @@ public class Consumer {
 //        }
 //
 //        // 调用 3
-//        System.out.println(userService.getUser(user).getName());
-//        System.out.println("----------------");
+        System.out.println(userService.getUser(user).getName());
+        System.out.println("----------------");
 
     }
 }

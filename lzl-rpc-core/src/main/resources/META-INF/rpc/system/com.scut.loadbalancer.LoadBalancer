@@ -1,0 +1,3 @@
+roundRobin=com.scut.loadbalancer.impl.RoundRobinLoadBalancer
+random=com.scut.loadbalancer.impl.RandomLoadBalancer
+consistentHash=com.scut.loadbalancer.impl.ConsistentHashLoadBalancer

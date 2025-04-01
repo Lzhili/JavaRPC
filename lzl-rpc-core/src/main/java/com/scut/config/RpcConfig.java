@@ -1,5 +1,6 @@
 package com.scut.config;
 
+import com.scut.loadbalancer.LoadBalancerKeys;
 import com.scut.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -35,7 +36,7 @@ public class RpcConfig {
     private boolean mock = false;
 
     /**
-     * 序列化方式
+     * 序列化方式（默认JDK）
      */
     private String serializer = SerializerKeys.JDK;
 
@@ -43,5 +44,10 @@ public class RpcConfig {
      * 注册中心配置
      */
     private RegistryConfig registryConfig = new RegistryConfig();
+
+    /**
+     * 负载均衡器（默认轮询）
+     */
+    private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
 
 }
