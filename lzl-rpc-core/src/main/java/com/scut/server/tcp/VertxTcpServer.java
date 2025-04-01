@@ -22,19 +22,30 @@ public class VertxTcpServer implements HttpServer {
 
         //测试粘包和半包
         server.connectHandler(socket -> {
-            String testMessage = "Hello, server!Hello, server!Hello, server!Hello, server!";
-            int messageLength = testMessage.getBytes().length;
-
-            // 构造parser
-            RecordParser parser = RecordParser.newFixed(messageLength);
+            // 构造 parser
+            RecordParser parser = RecordParser.newFixed(8);
             parser.setOutput(new Handler<Buffer>() {
+                // 初始化
+                int size = -1;
+                // 一次完整的读取（头 + 体）
+                Buffer resultBuffer = Buffer.buffer();
 
                 @Override
                 public void handle(Buffer buffer) {
-                    String str = new String(buffer.getBytes());
-                    System.out.println(str);
-                    if (testMessage.equals(str)) {
-                        System.out.println("good");
+                    if (-1 == size) {
+                        // 读取消息体长度
+                        size = buffer.getInt(4);
+                        parser.fixedSizeMode(size);
+                        // 写入头信息到结果
+//                        resultBuffer.appendBuffer(buffer);
+                    } else {
+                        // 写入体信息到结果
+                        resultBuffer.appendBuffer(buffer);
+                        System.out.println(resultBuffer.toString());
+                        // 重置一轮
+                        parser.fixedSizeMode(8);
+                        size = -1;
+                        resultBuffer = Buffer.buffer();
                     }
                 }
             });
