@@ -1,6 +1,7 @@
 package com.scut.config;
 
 import com.scut.loadbalancer.LoadBalancerKeys;
+import com.scut.retry.RetryStrategyKeys;
 import com.scut.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -49,5 +50,10 @@ public class RpcConfig {
      * 负载均衡器（默认轮询）
      */
     private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
+
+    /**
+     * 重试策略（默认不重试）
+     */
+    private String retryStrategy = RetryStrategyKeys.NO;
 
 }

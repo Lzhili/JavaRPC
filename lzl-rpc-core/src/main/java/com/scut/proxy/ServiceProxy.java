@@ -17,6 +17,8 @@ import com.scut.model.ServiceMetaInfo;
 import com.scut.protocol.*;
 import com.scut.registry.Registry;
 import com.scut.registry.RegistryFactory;
+import com.scut.retry.RetryStrategy;
+import com.scut.retry.RetryStrategyFactory;
 import com.scut.serializer.SerializerFactory;
 import com.scut.serializer.impl.JDKSerializer;
 import com.scut.serializer.Serializer;
@@ -78,6 +80,7 @@ public class ServiceProxy implements InvocationHandler {
             //将调用方法名（请求路径）作为负载均衡器的参数
             Map<String, Object> requestParams = Map.of("methodName", rpcRequest.getMethodName());
             ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
+            System.out.println("负载均衡选择的服务器：" + selectedServiceMetaInfo.getServiceAddress());
 
 //            // 发送http请求
 //            try (HttpResponse httpResponse = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
@@ -90,7 +93,11 @@ public class ServiceProxy implements InvocationHandler {
 //            }
 
             // 发送 TCP 请求
-            RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
+            //使用重试机制
+            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+            RpcResponse rpcResponse = retryStrategy.doRetry(() ->
+                VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+            );
             return rpcResponse.getData();
 
         } catch (IOException e) {

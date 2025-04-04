@@ -1,0 +1,3 @@
+no=com.scut.retry.impl.NoRetryStrategy
+exponentialBackoff=com.scut.retry.impl.ExponentialBackoffRetryStrategy
+fixedInterval=com.scut.retry.impl.FixedIntervalRetryStrategy
