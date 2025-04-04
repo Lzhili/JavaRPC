@@ -32,6 +32,7 @@ import io.vertx.core.net.NetClient;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -101,8 +102,14 @@ public class ServiceProxy implements InvocationHandler {
                 );
             }catch (Exception e){
                 // 容错机制
+                // 获取容错策略
                 TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
-                rpcResponse = tolerantStrategy.doTolerant(null, e);
+                //传入容错策略所需的参数
+                Map<String, Object> context = new HashMap<>();
+                context.put("rpcRequest", rpcRequest);
+                context.put("serviceMetaInfoList", serviceMetaInfoList);
+                context.put("exception", e);
+                rpcResponse = tolerantStrategy.doTolerant(context, e);
             }
 
             return rpcResponse.getData();
