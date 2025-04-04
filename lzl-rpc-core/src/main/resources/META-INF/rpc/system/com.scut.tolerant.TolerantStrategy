@@ -1,0 +1,4 @@
+failBack=com.scut.tolerant.impl.FailBackTolerantStrategy
+failFast=com.scut.tolerant.impl.FailFastTolerantStrategy
+failOver=com.scut.tolerant.impl.FailOverTolerantStrategy
+failSafe=com.scut.tolerant.impl.FailSafeTolerantStrategy

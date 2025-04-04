@@ -3,6 +3,7 @@ package com.scut.config;
 import com.scut.loadbalancer.LoadBalancerKeys;
 import com.scut.retry.RetryStrategyKeys;
 import com.scut.serializer.SerializerKeys;
+import com.scut.tolerant.TolerantStrategyKeys;
 import lombok.Data;
 
 /**
@@ -55,5 +56,10 @@ public class RpcConfig {
      * 重试策略（默认不重试）
      */
     private String retryStrategy = RetryStrategyKeys.NO;
+
+    /**
+     * 容错策略（默认抛出异常，交给外层处理）
+     */
+    private String tolerantStrategy = TolerantStrategyKeys.FAIL_FAST;
 
 }

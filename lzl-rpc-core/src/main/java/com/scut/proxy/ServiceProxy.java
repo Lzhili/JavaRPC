@@ -23,6 +23,8 @@ import com.scut.serializer.SerializerFactory;
 import com.scut.serializer.impl.JDKSerializer;
 import com.scut.serializer.Serializer;
 import com.scut.server.tcp.VertxTcpClient;
+import com.scut.tolerant.TolerantStrategy;
+import com.scut.tolerant.TolerantStrategyFactory;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.NetClient;
@@ -61,9 +63,6 @@ public class ServiceProxy implements InvocationHandler {
                 .args(args)
                 .build();
         try {
-            // 序列化
-            byte[] bodyBytes = serializer.serialize(rpcRequest);
-
             //从注册中心获取服务提供者的请求地址，服务发现
             RpcConfig rpcConfig = RpcApplication.getRpcConfig();
             Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
@@ -94,16 +93,23 @@ public class ServiceProxy implements InvocationHandler {
 
             // 发送 TCP 请求
             //使用重试机制
-            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
-            RpcResponse rpcResponse = retryStrategy.doRetry(() ->
-                VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
-            );
+            RpcResponse rpcResponse;
+            try{
+                RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+                rpcResponse = retryStrategy.doRetry(() ->
+                        VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+                );
+            }catch (Exception e){
+                // 容错机制
+                TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+                rpcResponse = tolerantStrategy.doTolerant(null, e);
+            }
+
             return rpcResponse.getData();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("调用失败");
         }
-
-        return null;
     }
 }
